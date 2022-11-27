@@ -4,10 +4,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 
+import java.io.ByteArrayOutputStream;
+
 public class BitmapTools {
 
     public static Bitmap toBitmap(byte[] data) {
         return BitmapFactory.decodeByteArray(data , 0, data.length);
+    }
+
+    public static byte[] toBytes(Bitmap in) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        in.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
     }
 
     public static Bitmap rotate(Bitmap in, int angle) {
