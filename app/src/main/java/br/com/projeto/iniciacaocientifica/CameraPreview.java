@@ -46,10 +46,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     public void surfaceDestroyed(SurfaceHolder holder) {
         /** Cuidado ao liberar a visualização da câmera . */
-        //if(mCamera!=null){
-        //    mCamera.stopPreview();
-        //    mCamera.setPreviewCallback(null);
-        //}
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
@@ -58,23 +54,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         if (mHolder.getSurface() == null){
             return;
-        }
-
-        /** Pare a visualização antes de fazer alterações */
-        try {
-            mCamera.stopPreview();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-        /** Defina o tamanho da visualização e faça alterações de redimensionamento, rotação ou reformatação aqui */
-        /** iniciar a visualização com novas configurações*/
-        try {
-            mCamera.setPreviewDisplay(mHolder);
-            mCamera.startPreview();
-
-        } catch (Exception e){
-            e.printStackTrace();
         }
     }
 

@@ -10,17 +10,25 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.Preview;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LifecycleOwner;
 
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -37,6 +45,7 @@ public class MainActivity extends AppCompatActivity{
 //region Variables Global
     
     private Camera mCamera;
+
     private CameraPreview mCameraPreview;
     private FrameLayout mFrameLayout;
 
@@ -49,7 +58,9 @@ public class MainActivity extends AppCompatActivity{
 
     private OkHttpClient mClient = new OkHttpClient();
 
-    private static final String URL = "http://192.168.0.102:5000/predict";
+    private static final String URL = "http://192.168.1.100:5000/predict";
+
+    private boolean isStopped = false;
 
 //endregion
 
@@ -82,14 +93,22 @@ public class MainActivity extends AppCompatActivity{
             mCameraPreview = new CameraPreview(MainActivity.this, mCamera);
 
             mFrameLayout = findViewById(R.id.camera_preview);
+
             mFrameLayout.addView(mCameraPreview);
 
             findViewById(R.id.button_capture).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v){
+                    isStopped = false;
                     mCamera.takePicture(null, null, mPicture);
                 }
             });
+
+            findViewById(R.id.button_stop).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v){ isStopped = true; }
+            });
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -118,7 +137,7 @@ public class MainActivity extends AppCompatActivity{
         try {
             cam = Camera.open();
 
-            //cam.setDisplayOrientation(90);
+            cam.setDisplayOrientation(90);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -167,7 +186,9 @@ public class MainActivity extends AppCompatActivity{
                         mSoundNotClear.start();
                     }
 
-                    mCamera.takePicture(null, null, mPicture);
+                    if (!isStopped){
+                        mCamera.takePicture(null, null, mPicture);
+                    }
                 }
             });
 
@@ -180,8 +201,7 @@ public class MainActivity extends AppCompatActivity{
 
     /** Limpando a visualização para o proximo frame */
     private void reloadCamera(){
-        mFrameLayout.removeView(mCameraPreview);
-        mFrameLayout.addView(mCameraPreview);
+        mCamera.startPreview();
     }
 
 //endregion

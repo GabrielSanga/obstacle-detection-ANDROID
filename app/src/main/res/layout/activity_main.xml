@@ -10,12 +10,30 @@
         android:layout_height="wrap_content"
         android:layout_weight="1" />
 
-    <Button
-        android:id="@+id/button_capture"
-        android:text="Iniciar"
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_capture"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Iniciar "
+            android:backgroundTint="@color/green"/>
+
+        <Button
+            android:id="@+id/button_stop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Parar"
+            android:backgroundTint="@color/red"/>
+
+    </LinearLayout>
 
 </LinearLayout>
 
